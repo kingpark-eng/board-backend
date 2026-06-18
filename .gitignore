@@ -1,0 +1,24 @@
+### Maven
+target/
+*.class
+
+### IntelliJ
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Uploads
+uploads/
+
+### Logs
+logs/
+*.log
+
+### OS
+.DS_Store
+Thumbs.db
+
+### Environment
+application-local.properties
+application-prod.properties
