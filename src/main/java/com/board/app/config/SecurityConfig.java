@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/files/download/**").permitAll()
+                .requestMatchers("/api/routines/**").authenticated()
                 // 나머지는 로그인 필요
                 .anyRequest().authenticated()
             )
