@@ -10,14 +10,14 @@ public class RoutineRequest {
     public static class Create{
 
         @NotBlank(message = "제목을 입력해주세요.")
-        private static String title;
+        private String title;
     }
 
     @Getter @Setter
     public static class Update{
 
         @NotBlank(message = "제목을 입력해주세요.")
-        private static String title;
+        private String title;
     }
 
 }

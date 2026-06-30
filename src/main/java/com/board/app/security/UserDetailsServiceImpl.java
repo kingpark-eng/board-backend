@@ -1,4 +1,4 @@
-package com.board.app.y;
+package com.board.app.security;
 
 import com.board.app.entity.User;
 import com.board.app.repository.UserRepository;

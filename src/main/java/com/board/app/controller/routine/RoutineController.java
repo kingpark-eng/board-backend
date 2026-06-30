@@ -1,6 +1,8 @@
 package com.board.app.controller.routine;
 
+import com.board.app.dto.routine.RoutineRequest;
 import com.board.app.dto.routine.RoutineResponse;
+import com.board.app.repository.routine.RoutineRepository;
 import com.board.app.service.routine.RoutineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 public class RoutineController {
 
     private final RoutineService routineService;
+    private final RoutineRepository routineRepository;
 
 /*  @GetMapping     → 조회 (GET)
     @PostMapping    → 생성 (POST)
@@ -26,13 +29,14 @@ public class RoutineController {
     //requestParam과 param의 차이
     //HTTP 요청과 쿼리에 사용하는 값.
     @GetMapping
-    public ResponseEntity<List<RoutineResponse.Detail>> getList(@RequestParam Long userId){
-        return ResponseEntity.ok(routineService.getList(userId));
+    public ResponseEntity<List<RoutineResponse.Detail>> getList(@AuthenticationPrincipal UserDetails userDetails){
+        System.out.println("여기123 => " + userDetails.getUsername());
+        return ResponseEntity.ok(routineService.getList(userDetails.getUsername()));
     }
 
     @PostMapping
-    public ResponseEntity<List<RoutineResponse.Detail>> create(@RequestParam Long userId){
-        return ResponseEntity.ok();
+    public ResponseEntity<RoutineResponse.Detail> create(@RequestBody RoutineRequest.Create create, @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(routineService.create(create, userDetails));
     }
 
     //부분 수정

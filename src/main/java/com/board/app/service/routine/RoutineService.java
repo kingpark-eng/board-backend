@@ -9,6 +9,7 @@ import com.board.app.repository.routine.RoutineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +22,11 @@ public class RoutineService {
     private final UserRepository userRepository;
 
     //목록조회
-    public List<RoutineResponse.Detail> getList(Long userId) {
-        List<Routine> routines = routineRepository.findByUserId(userId);
+    public List<RoutineResponse.Detail> getList(String userName) {
+
+        User user = userRepository.findByEmail(userName).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        List<Routine> routines = routineRepository.findByUserId(user.getId());
 
         //람다 표현식
         //return routines.map((data) -> RoutineResponse.Detail.from(data));
@@ -38,9 +42,9 @@ public class RoutineService {
     //단건조회
     //생성
     public RoutineResponse.Detail create(RoutineRequest.Create create, @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userRepository.findByEmail(userDetails.getUsername());
-
-        return null;
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        Routine routine = Routine.builder().title(create.getTitle()).user(user).build();
+        return RoutineResponse.Detail.from(routineRepository.save(routine));
     }
 
 

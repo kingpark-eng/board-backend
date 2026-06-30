@@ -25,6 +25,6 @@ public class Routine {
     private String done;
 
     @ManyToOne(fetch = FetchType.LAZY) //LAZY 필요할 때만 호출
-    @JoinColumn(name = "email")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 }
