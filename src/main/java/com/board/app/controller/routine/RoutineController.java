@@ -30,14 +30,11 @@ public class RoutineController {
     //HTTP 요청과 쿼리에 사용하는 값.
     @GetMapping
     public ResponseEntity<List<RoutineResponse.Detail>> getList(@AuthenticationPrincipal UserDetails userDetails){
-        System.out.println("여기123 => " + userDetails.getUsername());
         return ResponseEntity.ok(routineService.getList(userDetails.getUsername()));
     }
 
     @PostMapping
     public ResponseEntity<RoutineResponse.Detail> create(@RequestBody RoutineRequest.Create create, @AuthenticationPrincipal UserDetails userDetails) {
-        System.out.println(create.getTitle());
-        System.out.println("여기옴");
         return ResponseEntity.ok(routineService.create(create, userDetails));
     }
 

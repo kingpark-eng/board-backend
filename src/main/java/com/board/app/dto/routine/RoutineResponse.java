@@ -10,13 +10,13 @@ public class RoutineResponse {
     public static class Detail{
         private Long id;
         private String title;
-        private String done;
+        private Boolean done;
 
         public static Detail from(Routine routine){
             return Detail.builder()
                     .id(routine.getId())
                     .title(routine.getTitle())
-                    .done(routine.getDone())
+                    .done(routine.isDone())
                     .build();
         }
     }

@@ -21,8 +21,11 @@ public class Routine {
     @Column
     private String title;
 
+    @Column(nullable = false)
+    private boolean done;
+
     @Column
-    private String done;
+    private String email;
 
     @ManyToOne(fetch = FetchType.LAZY) //LAZY 필요할 때만 호출
     @JoinColumn(name = "user_id", referencedColumnName = "id")
