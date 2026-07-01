@@ -36,6 +36,8 @@ public class RoutineController {
 
     @PostMapping
     public ResponseEntity<RoutineResponse.Detail> create(@RequestBody RoutineRequest.Create create, @AuthenticationPrincipal UserDetails userDetails) {
+        System.out.println(create.getTitle());
+        System.out.println("여기옴");
         return ResponseEntity.ok(routineService.create(create, userDetails));
     }
 
