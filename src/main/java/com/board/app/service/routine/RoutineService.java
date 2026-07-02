@@ -45,7 +45,6 @@ public class RoutineService {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
         Routine routine = Routine.builder()
                 .title(create.getTitle())
-                .email(userDetails.getUsername())
                 .user(user).build();
         return RoutineResponse.Detail.from(routineRepository.save(routine));
     }
