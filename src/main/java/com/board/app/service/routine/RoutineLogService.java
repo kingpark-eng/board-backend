@@ -1,24 +1,36 @@
 package com.board.app.service.routine;
 
-import com.board.app.entity.routine.Routine;
-import com.board.app.repository.routine.RoutineLogRepository;
-import com.board.app.repository.routine.RoutineRepository;
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import com.board.app.dto.routine.RoutineResponse;
+import com.board.app.entity.User;
+import com.board.app.entity.routine.Routine;
+import com.board.app.entity.routine.RoutineLog;
+import com.board.app.repository.UserRepository;
+import com.board.app.repository.routine.RoutineLogRepository;
+import com.board.app.repository.routine.RoutineRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class RoutineLogService {
 
-    private RoutineRepository routineRepository;
-    private RoutineLogRepository routineLogRepository;
-
+    private final RoutineRepository routineRepository;
+    private final RoutineLogRepository routineLogRepository;
+    private final UserRepository userRepository;
+    
     @Transactional
     public boolean toggleToday(Long routineId, String email){
-
+    	System.out.println("여기오는거 맞나");
         //본인 소유 루틴인지 검증
         //findBy + Id + And + User + Email
         //Id → routine 테이블의 id 컬럼 (이건 맞습니다)
@@ -29,11 +41,50 @@ public class RoutineLogService {
         LocalDate today = LocalDate.now();
         var existing = routineLogRepository.findByRoutineIdAndLogDate(routineId, today);
 
+        
+        RoutineLog routineEntity = RoutineLog.builder().routine(routine).logDate(today).build();
+        
+        if(existing.isPresent()) {
+        	routineLogRepository.delete(existing.get());
+        	return true;
+        }else {
+        	routineLogRepository.save(routineEntity);
+        	return false;
+        }
+    }
+    
+    @Transactional
+    public List<RoutineLog> findMonthlyLogs(int year, int month, UserDetails userDetails){
+    	
+    	User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(()->new UsernameNotFoundException("User not found"));
+    
+    	List<Routine> routines = routineRepository.findByUserId(user.getId());
+    	
+    	List<Long> routineIds = routines.stream().map(Routine::getId).toList();
+    	
+    	
+    	LocalDate start = LocalDate.of(year, month, 1);
+    	LocalDate end   = start.withDayOfMonth(start.lengthOfMonth());
+    	
+    	List<RoutineLog> routineLog = routineLogRepository.findAllByRoutineIdAndLogDateBetween(routineIds, start, end);
 
-
-
-
-
-        return true;
+    	return routineLog;
+    }
+    
+    @Transactional
+    public List<RoutineLog> findDayLogs(LocalDate logDate, UserDetails userDetails){
+    	
+    	User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(()->new UsernameNotFoundException("User not found"));
+    	
+    	List<Routine> routines = routineRepository.findByUserId(user.getId());
+		Set<Long> routineIds = new HashSet(routines.stream().map(Routine::getId).toList());
+    	
+    	List<RoutineLog> routineLog = routineLogRepository.findAllByRoutineIdAndLogDateOne(routineIds, logDate);
+    	
+    	   	    	   	
+    	RoutineResponse.Detail.from(routines, routineIds);
+    	routineLog.forEach((data)-> System.out.println(data.getRoutine().getId()));
+    	
+    	return routineLog;
     }
 }

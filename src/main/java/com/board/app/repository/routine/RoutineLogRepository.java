@@ -1,13 +1,15 @@
 package com.board.app.repository.routine;
 
-import com.board.app.entity.routine.RoutineLog;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import com.board.app.entity.routine.RoutineLog;
 
 public interface RoutineLogRepository extends JpaRepository<RoutineLog, Long> {
 
@@ -24,4 +26,12 @@ public interface RoutineLogRepository extends JpaRepository<RoutineLog, Long> {
            "where r1.routine.user.id = :userId and r1.logDate between :start and :end group by r1.logDate")
     List<Object[]> countByDateRange(@Param("userId") Long userId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
+    List<RoutineLog> findAllByRoutineIdAndLogDate(Long routineId, LocalDate logDate);
+ 
+    
+    @Query("select r1 from RoutineLog r1 " + "where r1.routine.id in :routineIds" + " AND r1.logDate BETWEEN :start AND :end")
+    List<RoutineLog> findAllByRoutineIdAndLogDateBetween(List<Long> routineIds, LocalDate start, LocalDate end);
+    
+    @Query("select r1 from RoutineLog r1 " + "where r1.routine.id in :routineIds" + " AND r1.logDate =:localDate")
+    List<RoutineLog> findAllByRoutineIdAndLogDateOne(Set<Long> routineIds, LocalDate localDate);
 }
