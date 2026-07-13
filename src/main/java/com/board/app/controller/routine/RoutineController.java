@@ -45,8 +45,9 @@ public class RoutineController {
         return null;
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<List<RoutineResponse.Detail>> delete(@AuthenticationPrincipal UserDetails userDetails){
-        return null;
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<?> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails){
+    	routineService.deleteRoutine(id, userDetails);
+    	return ResponseEntity.noContent().build();	// 본문 없음 204 에러
     }
 }

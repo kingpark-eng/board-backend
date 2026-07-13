@@ -11,4 +11,6 @@ public interface RoutineRepository extends JpaRepository<Routine, Long> {
     List<Routine> findByUserId(Long userId);
 
     Optional<Routine> findByIdAndUserEmail(Long routineId, String email);
+    
+    void deleteByUserId(Long routineId);
 }

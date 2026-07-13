@@ -83,8 +83,7 @@ public class RoutineLogService {
     	
     	   	    	   	
     	RoutineResponse.Detail.from(routines, routineIds);
-    	routineLog.forEach((data)-> System.out.println(data.getRoutine().getId()));
-    	
+    	    	
     	return routineLog;
     }
 }
