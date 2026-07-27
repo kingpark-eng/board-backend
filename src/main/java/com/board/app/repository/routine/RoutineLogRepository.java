@@ -20,18 +20,23 @@ public interface RoutineLogRepository extends JpaRepository<RoutineLog, Long> {
     @Query("select r1.routine.id from RoutineLog r1 " +
             "where r1.routine.id in :routineIds and r1.logDate = :date")
     List<Long> findDoneRoutines(@Param("routineIds") List<Long> routineIds, @Param("date") LocalDate date);
-
-    // 히트맵용: 특정 기간 날짜별 완료 개수
+    
+        // 히트맵용: 특정 기간 날짜별 완료 개수
     @Query("select r1.logDate, count(r1) from RoutineLog r1 " +
            "where r1.routine.user.id = :userId and r1.logDate between :start and :end group by r1.logDate")
     List<Object[]> countByDateRange(@Param("userId") Long userId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
     List<RoutineLog> findAllByRoutineIdAndLogDate(Long routineId, LocalDate logDate);
- 
     
     @Query("select r1 from RoutineLog r1 " + "where r1.routine.id in :routineIds" + " AND r1.logDate BETWEEN :start AND :end")
     List<RoutineLog> findAllByRoutineIdAndLogDateBetween(List<Long> routineIds, LocalDate start, LocalDate end);
     
     @Query("select r1 from RoutineLog r1 " + "where r1.routine.id in :routineIds" + " AND r1.logDate =:localDate")
     List<RoutineLog> findAllByRoutineIdAndLogDateOne(Set<Long> routineIds, LocalDate localDate);
+    
+    @Query("SELECT l.logDate, COUNT(l) FROM RoutineLog l " +
+ 	       "WHERE l.routine.user.id = :userId " +
+ 	       "AND l.logDate BETWEEN :start AND :end " +
+ 	       "GROUP BY l.logDate")
+    List<Object[]> countByDate(@Param("userId") Long userId, @Param("start") LocalDate start, @Param("end") LocalDate end);
 }

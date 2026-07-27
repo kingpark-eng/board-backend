@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.board.app.dto.routine.RoutineRequest;
 import com.board.app.dto.routine.RoutineResponse;
@@ -33,7 +34,7 @@ public class RoutineService {
 
         User user = userRepository.findByEmail(userName).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        List<Routine> routines = routineRepository.findByUserId(user.getId());
+        List<Routine> routines = routineRepository.findByUserIdAndDeleteAtIsNull(user.getId());
 
         LocalDate today = LocalDate.now();
         
@@ -79,13 +80,10 @@ public class RoutineService {
     }
     
     //루틴삭제
+    @Transactional
     public void deleteRoutine(Long id, UserDetails userDetails) {
-    	User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(()-> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
-    	Routine routine = Routine.builder()
-    			.id(id)
-    			.user(user)
-    			.build();
-    	routineRepository.delete(routine);
+    	Routine routine = routineRepository.findByIdAndUserEmail(id, userDetails.getUsername()).orElseThrow(()-> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+    	routine.softDelete();
     }
 
 }

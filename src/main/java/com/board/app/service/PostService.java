@@ -51,7 +51,6 @@ public class PostService {
         User user = findUser(email);
         Post post = Post.builder()
                 .title(req.getTitle())
-                .content(req.getContent())
                 .user(user)
                 .build();
         return PostResponse.Detail.from(postRepository.save(post));
@@ -63,7 +62,6 @@ public class PostService {
         Post post = findPost(postId);
         checkAuthor(post, email);
         post.setTitle(req.getTitle());
-        post.setContent(req.getContent());
         return PostResponse.Detail.from(post);
     }
 

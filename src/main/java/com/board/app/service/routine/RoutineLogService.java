@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.board.app.dto.routine.DailySummaryResponse.DailySummaryDto;
 import com.board.app.dto.routine.RoutineResponse;
 import com.board.app.entity.User;
 import com.board.app.entity.routine.Routine;
@@ -86,4 +87,18 @@ public class RoutineLogService {
     	    	
     	return routineLog;
     }
+    
+    @Transactional
+    public List<DailySummaryDto> getMonthlySummary(int year, int month, UserDetails userDetails) {
+        LocalDate start = LocalDate.of(year, month, 1);
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+        
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(()->new UsernameNotFoundException("User not found"));
+        
+        long total = routineRepository.countByUserId(user.getId());
+        
+        return routineLogRepository.countByDate(user.getId(), start, end).stream().map(e-> new DailySummaryDto((LocalDate)e[0], (long)e[1] ,total)).toList();
+    }
+    
+    
 }

@@ -50,7 +50,6 @@ public class PostResponse {
             return Detail.builder()
                     .id(post.getId())
                     .title(post.getTitle())
-                    .content(post.getContent())
                     .authorNickname(post.getUser().getNickname())
                     .authorId(post.getUser().getId())
                     .viewCount(post.getViewCount())

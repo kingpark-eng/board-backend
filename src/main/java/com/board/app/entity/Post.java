@@ -21,11 +21,7 @@ public class Post extends BaseEntity {
 
     @Column(nullable = false, length = 200)
     private String title;
-
-    @Lob
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String content;
-
+ 
     @Column(nullable = false)
     @Builder.Default
     private Integer viewCount = 0;

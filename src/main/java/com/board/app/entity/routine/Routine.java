@@ -1,7 +1,17 @@
 package com.board.app.entity.routine;
 
+import java.time.LocalDateTime;
+
 import com.board.app.entity.User;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,4 +38,11 @@ public class Routine {
     @ManyToOne(fetch = FetchType.LAZY) //LAZY 필요할 때만 호출
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+    
+    @Column
+    private LocalDateTime deleteAt;
+    
+    public void softDelete() {
+    	this.deleteAt = LocalDateTime.now();
+    }
 }

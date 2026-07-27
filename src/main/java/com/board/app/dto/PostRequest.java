@@ -15,7 +15,6 @@ public class PostRequest {
         @Size(max = 200, message = "제목은 200자 이내여야 합니다.")
         private String title;
 
-        @NotBlank(message = "내용을 입력해주세요.")
         private String content;
     }
 

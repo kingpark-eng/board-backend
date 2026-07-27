@@ -46,5 +46,10 @@ public class RoutineLogController {
     	
     	return ResponseEntity.ok(routineLogService.findDayLogs(logDate, userDetails));
     }
+    
+    @GetMapping("/monthlySummary")
+    public ResponseEntity<?> monthlySummary(@RequestParam Integer year, @RequestParam Integer month, @AuthenticationPrincipal UserDetails userDetails){
+    	return ResponseEntity.ok(routineLogService.getMonthlySummary(year, month, userDetails));
+    }
 
 }

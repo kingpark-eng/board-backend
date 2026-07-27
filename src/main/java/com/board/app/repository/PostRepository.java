@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query("SELECT p FROM Post p WHERE p.title LIKE %:keyword% OR p.content LIKE %:keyword%")
+    @Query("SELECT p FROM Post p WHERE p.title LIKE %:keyword%")
     Page<Post> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
