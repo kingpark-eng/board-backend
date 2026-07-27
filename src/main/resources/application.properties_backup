@@ -1,13 +1,11 @@
 spring.application.name=board-backend
 
 # ===========================
-# DataSource (Aiven MySQL / MariaDB 드라이버)
-# 실제 접속 정보는 환경변수로 주입 → 코드/깃허브에 비밀번호 안 남김
-# 값이 없으면 : 뒤 기본값(로컬)으로 접속
+# DataSource (MariaDB)
 # ===========================
-spring.datasource.url=${DB_URL:jdbc:mariadb://localhost:3306/board_db}
-spring.datasource.username=${DB_USERNAME:root}
-spring.datasource.password=${DB_PASSWORD:changeme}
+spring.datasource.url=jdbc:mariadb://localhost:3306/board_db
+spring.datasource.username=root
+spring.datasource.password=q16281310!
 spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
 
 # ===========================
@@ -16,8 +14,6 @@ spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
-# 로컬 MariaDB에서는 MariaDBDialect, Aiven(MySQL 서버)에서는 MySQLDialect가 안전.
-# 보통 생략해도 Hibernate가 자동 감지하므로, 문제 시 아래 한 줄로 고정 가능.
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
 
 # ===========================
@@ -28,21 +24,16 @@ spring.servlet.multipart.max-file-size=10MB
 spring.servlet.multipart.max-request-size=30MB
 
 # ===========================
-# JWT (시크릿은 환경변수로 주입)
+# JWT
 # ===========================
-jwt.secret=${JWT_SECRET:your-very-long-secret-key-at-least-256-bits-for-hs256-algorithm-replace-this}
+jwt.secret=your-very-long-secret-key-at-least-256-bits-for-hs256-algorithm-replace-this
 jwt.expiration=86400000
 jwt.refresh-expiration=604800000
 
 # ===========================
 # File Storage
 # ===========================
-file.upload-dir=${FILE_UPLOAD_DIR:./uploads}
-
-# ===========================
-# CORS (CorsConfig.java 에서 사용)
-# ===========================
-cors.allowed-origins=${CORS_ALLOWED_ORIGINS:http://localhost:3000}
+file.upload-dir=./uploads
 
 # ===========================
 # Logging
