@@ -48,6 +48,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // CORS 프리플라이트(OPTIONS)는 항상 허용
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()	//로컬에서 삭제
+                .requestMatchers("/ping").permitAll()   // 이 줄 추가
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/files/download/**").permitAll()

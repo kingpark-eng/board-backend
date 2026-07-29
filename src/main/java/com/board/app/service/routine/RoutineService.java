@@ -1,6 +1,7 @@
 package com.board.app.service.routine;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,7 +37,7 @@ public class RoutineService {
 
         List<Routine> routines = routineRepository.findByUserIdAndDeleteAtIsNull(user.getId());
 
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
         
         //1번 방법
 //        List<RoutineLog> routineLog = routines.stream().flatMap((data)-> routineLogRepository.findAllByRoutineIdAndLogDate(data.getId(), today).stream()).toList();
