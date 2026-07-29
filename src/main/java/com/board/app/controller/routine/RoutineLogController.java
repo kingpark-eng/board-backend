@@ -52,4 +52,9 @@ public class RoutineLogController {
     	return ResponseEntity.ok(routineLogService.getMonthlySummary(year, month, userDetails));
     }
 
+    @GetMapping("/streak")
+    public ResponseEntity<?> getStreak(@AuthenticationPrincipal UserDetails userDetails){
+    	return ResponseEntity.ok(routineLogService.getStreak(userDetails));
+    }
+    
 }

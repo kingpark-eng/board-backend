@@ -1,10 +1,12 @@
 package com.board.app.service.routine;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.internal.build.AllowPrintStacktrace;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,6 @@ public class RoutineLogService {
     
     @Transactional
     public boolean toggleToday(Long routineId, String email){
-    	System.out.println("여기오는거 맞나");
         //본인 소유 루틴인지 검증
         //findBy + Id + And + User + Email
         //Id → routine 테이블의 id 컬럼 (이건 맞습니다)
@@ -100,5 +101,26 @@ public class RoutineLogService {
         return routineLogRepository.countByDate(user.getId(), start, end).stream().map(e-> new DailySummaryDto((LocalDate)e[0], (long)e[1] ,total)).toList();
     }
     
+    @Transactional
+    //return int integer ? object
+    public int getStreak(UserDetails userDetails){
+    	
+    	User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(()->new UsernameNotFoundException("User not found"));
+    	
+    	List<LocalDate> logDate = routineLogRepository.findDistinctLogDates(user.getId());
+    	
+    	Set<LocalDate> logged = new HashSet<>(logDate);
+    	
+    	LocalDate cursor = LocalDate.now(ZoneId.of("Asia/Seoul"));
+    	if(!logged.contains(cursor)) cursor = cursor.minusDays(1);	//오늘 미완료
+    	
+    	int steak=0;
+    	while(logged.contains(cursor)) {
+    		steak++;
+    		cursor.minusDays(1);
+    	}
+    	
+    	return steak;
+    }
     
 }

@@ -39,4 +39,7 @@ public interface RoutineLogRepository extends JpaRepository<RoutineLog, Long> {
  	       "AND l.logDate BETWEEN :start AND :end " +
  	       "GROUP BY l.logDate")
     List<Object[]> countByDate(@Param("userId") Long userId, @Param("start") LocalDate start, @Param("end") LocalDate end);
+    
+    @Query("SELECT DISTINCT l.logDate FROM RoutineLog l JOIN l.routine r WHERE r.user.id=:userId ORDER BY l.logDate DESC")
+    List<LocalDate> findDistinctLogDates(@Param("userId") Long userId);
 }
