@@ -20,13 +20,12 @@ public class PostResponse {
         private long commentCount;
         private LocalDateTime createdAt;
 
-        public static Summary from(Post post, long commentCount) {
+        public static Summary from(Post post) {
             return Summary.builder()
                     .id(post.getId())
                     .title(post.getTitle())
                     .authorNickname(post.getUser().getNickname())
                     .viewCount(post.getViewCount())
-                    .commentCount(commentCount)
                     .createdAt(post.getCreatedAt())
                     .build();
         }

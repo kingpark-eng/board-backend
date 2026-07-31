@@ -3,8 +3,7 @@ package com.board.app.service;
 import com.board.app.dto.PostRequest;
 import com.board.app.dto.PostResponse;
 import com.board.app.entity.Post;
-import com.board.app.entity.User;
-import com.board.app.repository.CommentRepository;
+import com.board.app.entity.User; 
 import com.board.app.repository.PostRepository;
 import com.board.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
-    private final CommentRepository commentRepository;
+    private final UserRepository userRepository; 
 
     // 목록 조회 (페이징 + 검색)
     @Transactional(readOnly = true)
@@ -32,8 +30,7 @@ public class PostService {
                 : postRepository.findAllByOrderByCreatedAtDesc(pageable);
 
         return posts.map(post -> {
-            long commentCount = commentRepository.countByPostId(post.getId());
-            return PostResponse.Summary.from(post, commentCount);
+            return PostResponse.Summary.from(post);
         });
     }
 
