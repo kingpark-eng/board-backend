@@ -117,7 +117,7 @@ public class RoutineLogService {
     	int steak=0;
     	while(logged.contains(cursor)) {
     		steak++;
-    		cursor.minusDays(1);
+    		cursor = cursor.minusDays(1);
     	}
     	
     	return steak;
