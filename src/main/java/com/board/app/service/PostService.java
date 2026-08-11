@@ -22,9 +22,8 @@ public class PostService {
 
     // 목록 조회 (페이징 + 검색)
     @Transactional(readOnly = true)
-    public Page<PostResponse.Summary> getList(String keyword, int page, int size) {
+    public Page<PostResponse.Summary> getList(String keyword, int page, int size, String date) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-
         Page<Post> posts = (keyword != null && !keyword.isBlank())
                 ? postRepository.searchByKeyword(keyword, pageable)
                 : postRepository.findAllByOrderByCreatedAtDesc(pageable);

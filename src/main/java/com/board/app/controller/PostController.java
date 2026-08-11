@@ -24,9 +24,9 @@ public class PostController {
     public ResponseEntity<Page<PostResponse.Summary>> getList(
             @RequestParam(defaultValue = "") String keyword,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "") String date) {
 
-        return ResponseEntity.ok(postService.getList(keyword, page, size));
+        return ResponseEntity.ok(postService.getList(keyword, page, size, date));
     }
 
     // GET /api/posts/{id}
